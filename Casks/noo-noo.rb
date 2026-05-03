@@ -1,6 +1,6 @@
 cask "noo-noo" do
-  version "0.5.0"
-  sha256 "3149f806b5e956d107e2e64e7c009bb5a87eeaeed40b107c3f9b98e24f43443c"
+  version "0.5.1"
+  sha256 "467201884097337aaafad8355138ffb8fbf9add56cd1c04d00612745c15936fb"
 
   url "https://github.com/FRIKKern/noo-noo/releases/download/v#{version}/Noo-Noo-v#{version}.dmg"
   name "Noo-Noo"
@@ -10,11 +10,11 @@ cask "noo-noo" do
   depends_on macos: ":big_sur"
 
   app "Noo-Noo.app"
-  binary "#{appdir}/Noo-Noo.app/Contents/MacOS/noo-noo", target: "noo-noo"
-  binary "#{appdir}/Noo-Noo.app/Contents/MacOS/noo-nood", target: "noo-nood"
+  binary "#{appdir}/Noo-Noo.app/Contents/Resources/bin/noo-noo", target: "noo-noo"
+  binary "#{appdir}/Noo-Noo.app/Contents/Resources/bin/noo-nood", target: "noo-nood"
 
   postflight do
-    system_command "#{appdir}/Noo-Noo.app/Contents/MacOS/noo-noo",
+    system_command "#{appdir}/Noo-Noo.app/Contents/Resources/bin/noo-noo",
                    args: ["install"],
                    sudo: false
   end
