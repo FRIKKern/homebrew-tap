@@ -1,6 +1,6 @@
 cask "noo-noo" do
-  version "0.4.0"
-  sha256 "dfa3f17f0caf07fa94f7c40169a296c21f7d1bc8b359ae57ca6f7b14da7ab11c"
+  version "0.5.0"
+  sha256 "3149f806b5e956d107e2e64e7c009bb5a87eeaeed40b107c3f9b98e24f43443c"
 
   url "https://github.com/FRIKKern/noo-noo/releases/download/v#{version}/Noo-Noo-v#{version}.dmg"
   name "Noo-Noo"

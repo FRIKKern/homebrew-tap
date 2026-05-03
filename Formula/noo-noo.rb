@@ -1,9 +1,9 @@
 class NooNoo < Formula
   desc "Smart cleanup for Mac developers (CLI-only, headless)"
   homepage "https://github.com/FRIKKern/noo-noo"
-  url "https://github.com/FRIKKern/noo-noo/releases/download/v0.4.0/noo-noo-v0.4.0-darwin.tar.gz"
-  version "0.4.0"
-  sha256 "6be0f036418d81ed06a2f6c85913071197708bdfcf8d4383edd6d4598bd20f7c"
+  url "https://github.com/FRIKKern/noo-noo/releases/download/v0.5.0/noo-noo-v0.5.0-darwin.tar.gz"
+  version "0.5.0"
+  sha256 "f22d36f3f4016143292d36cedb99bde21cc0cde84a31dab813baa5abad9f8496"
   license "MIT"
 
   depends_on :macos
