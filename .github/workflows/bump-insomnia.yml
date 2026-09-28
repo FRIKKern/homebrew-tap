@@ -1,0 +1,41 @@
+name: Bump insomnia
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  bump:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Find latest release
+        id: latest
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG=$(gh release view --repo FRIKKern/insomnia --json tagName --jq .tagName)
+          CUR=$(sed -n 's|.*/archive/refs/tags/v\([^/]*\)\.tar\.gz.*|\1|p' Formula/insomnia.rb)
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"; echo "new=${TAG#v}" >> "$GITHUB_OUTPUT"; echo "cur=$CUR" >> "$GITHUB_OUTPUT"
+          echo "formula has $CUR, latest release is $TAG"
+      - name: Update formula
+        if: steps.latest.outputs.new != steps.latest.outputs.cur
+        run: |
+          URL="https://github.com/FRIKKern/insomnia/archive/refs/tags/${{ steps.latest.outputs.tag }}.tar.gz"
+          SHA=$(curl -fsSL "$URL" | shasum -a 256 | cut -d' ' -f1)
+          sed -i '' -e "s|url \".*\"|url \"$URL\"|" -e "s|sha256 \".*\"|sha256 \"$SHA\"|" Formula/insomnia.rb
+          git diff --stat
+      - name: Test-install the formula
+        if: steps.latest.outputs.new != steps.latest.outputs.cur
+        run: |
+          brew install --build-from-source ./Formula/insomnia.rb
+          brew test ./Formula/insomnia.rb
+          brew audit --strict ./Formula/insomnia.rb
+      - name: Commit and push
+        if: steps.latest.outputs.new != steps.latest.outputs.cur
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "insomnia ${{ steps.latest.outputs.new }}"
+          git push
