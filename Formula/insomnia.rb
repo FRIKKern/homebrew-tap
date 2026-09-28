@@ -32,6 +32,6 @@ class Insomnia < Formula
   end
 
   test do
-    assert_predicate prefix/"Insomnia.app/Contents/MacOS/Insomnia", :exist?
+    assert_path_exists prefix/"Insomnia.app/Contents/MacOS/Insomnia"
   end
 end
