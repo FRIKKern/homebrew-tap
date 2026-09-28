@@ -1,6 +1,11 @@
 # FRIKKern/homebrew-tap
 
-Homebrew tap for [noo-noo](https://github.com/FRIKKern/noo-noo) — a smart, opt-in cleanup daemon for Mac developers.
+| Formula | What |
+|---------|------|
+| [insomnia](https://github.com/FRIKKern/insomnia) | Menu bar app that keeps your Mac awake, with lid-closed mode and guards. `brew install frikkern/tap/insomnia` |
+| [noo-noo](https://github.com/FRIKKern/noo-noo) | A smart, opt-in cleanup daemon for Mac developers |
+
+## noo-noo
 
 ## Install
 
