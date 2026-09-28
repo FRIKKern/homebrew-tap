@@ -1,8 +1,8 @@
 class Insomnia < Formula
   desc "Menu bar app that keeps your Mac awake, with lid-closed mode and guards"
   homepage "https://github.com/FRIKKern/insomnia"
-  url "https://github.com/FRIKKern/insomnia/archive/refs/tags/v1.0.0.tar.gz"
-  sha256 "459b0394b212cc7f2a76515e87f717bddafbb8651a40c8056a1275c5d712a57b"
+  url "https://github.com/FRIKKern/insomnia/archive/refs/tags/v1.1.0.tar.gz"
+  sha256 "c2906314b2347d7319eb140beacceaea5d1459e062d3e03c2cc38f0e399cc08a"
   license "MIT"
   head "https://github.com/FRIKKern/insomnia.git", branch: "main"
 
