@@ -26,16 +26,19 @@ jobs:
           SHA=$(curl -fsSL "$URL" | shasum -a 256 | cut -d' ' -f1)
           sed -i '' -e "s|url \".*\"|url \"$URL\"|" -e "s|sha256 \".*\"|sha256 \"$SHA\"|" Formula/insomnia.rb
           git diff --stat
-      - name: Test-install the formula
-        if: steps.latest.outputs.new != steps.latest.outputs.cur
-        run: |
-          brew install --build-from-source ./Formula/insomnia.rb
-          brew test ./Formula/insomnia.rb
-          brew audit --strict ./Formula/insomnia.rb
-      - name: Commit and push
+      - name: Commit locally
         if: steps.latest.outputs.new != steps.latest.outputs.cur
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -am "insomnia ${{ steps.latest.outputs.new }}"
-          git push
+      - name: Test-install from a local tap of this commit
+        if: steps.latest.outputs.new != steps.latest.outputs.cur
+        run: |
+          brew tap frikkern/tap "$GITHUB_WORKSPACE"
+          brew install --build-from-source frikkern/tap/insomnia
+          brew test frikkern/tap/insomnia
+          brew audit --strict frikkern/tap/insomnia
+      - name: Push
+        if: steps.latest.outputs.new != steps.latest.outputs.cur
+        run: git push
