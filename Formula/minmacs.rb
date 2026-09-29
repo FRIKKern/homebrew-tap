@@ -1,8 +1,8 @@
 class Minmacs < Formula
   desc "Menu bar app and CLI that reclaims CPU and RAM for developers and agents"
   homepage "https://github.com/FRIKKern/minmacs"
-  url "https://github.com/FRIKKern/minmacs/archive/refs/tags/v1.0.0.tar.gz"
-  sha256 "42f1ef7ab6adbffc44e40fb0b8c3bbbd3c2d2044f375fe5fe50d0937969966e7"
+  url "https://github.com/FRIKKern/minmacs/archive/refs/tags/v1.1.0.tar.gz"
+  sha256 "bd1b64eb950521908e3c0e4290f48636cea191aa3afd599d628da3ffc2d5d623"
   license "MIT"
   head "https://github.com/FRIKKern/minmacs.git", branch: "main"
 
