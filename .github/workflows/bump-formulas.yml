@@ -1,4 +1,4 @@
-name: Bump insomnia
+name: Bump formulas
 on:
   schedule:
     - cron: "17 */6 * * *"
@@ -8,6 +8,10 @@ permissions:
 jobs:
   bump:
     runs-on: macos-latest
+    strategy:
+      max-parallel: 1
+      matrix:
+        formula: [insomnia, minmacs]
     steps:
       - uses: actions/checkout@v4
       - name: Find latest release
@@ -15,30 +19,31 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG=$(gh release view --repo FRIKKern/insomnia --json tagName --jq .tagName)
-          CUR=$(sed -n 's|.*/archive/refs/tags/v\([^/]*\)\.tar\.gz.*|\1|p' Formula/insomnia.rb)
+          git pull -q
+          TAG=$(gh release view --repo FRIKKern/${{ matrix.formula }} --json tagName --jq .tagName)
+          CUR=$(sed -n 's|.*/archive/refs/tags/v\([^/]*\)\.tar\.gz.*|\1|p' Formula/${{ matrix.formula }}.rb)
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"; echo "new=${TAG#v}" >> "$GITHUB_OUTPUT"; echo "cur=$CUR" >> "$GITHUB_OUTPUT"
-          echo "formula has $CUR, latest release is $TAG"
+          echo "${{ matrix.formula }}: formula has $CUR, latest release is $TAG"
       - name: Update formula
         if: steps.latest.outputs.new != steps.latest.outputs.cur
         run: |
-          URL="https://github.com/FRIKKern/insomnia/archive/refs/tags/${{ steps.latest.outputs.tag }}.tar.gz"
+          URL="https://github.com/FRIKKern/${{ matrix.formula }}/archive/refs/tags/${{ steps.latest.outputs.tag }}.tar.gz"
           SHA=$(curl -fsSL "$URL" | shasum -a 256 | cut -d' ' -f1)
-          sed -i '' -e "s|url \".*\"|url \"$URL\"|" -e "s|sha256 \".*\"|sha256 \"$SHA\"|" Formula/insomnia.rb
+          sed -i '' -e "s|url \".*\"|url \"$URL\"|" -e "s|sha256 \".*\"|sha256 \"$SHA\"|" Formula/${{ matrix.formula }}.rb
           git diff --stat
       - name: Commit locally
         if: steps.latest.outputs.new != steps.latest.outputs.cur
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -am "insomnia ${{ steps.latest.outputs.new }}"
+          git commit -am "${{ matrix.formula }} ${{ steps.latest.outputs.new }}"
       - name: Test-install from a local tap of this commit
         if: steps.latest.outputs.new != steps.latest.outputs.cur
         run: |
           brew tap frikkern/tap "$GITHUB_WORKSPACE"
-          brew install --build-from-source frikkern/tap/insomnia
-          brew test frikkern/tap/insomnia
-          brew audit --strict frikkern/tap/insomnia
+          brew install --build-from-source frikkern/tap/${{ matrix.formula }}
+          brew test frikkern/tap/${{ matrix.formula }}
+          brew audit --strict frikkern/tap/${{ matrix.formula }}
       - name: Push
         if: steps.latest.outputs.new != steps.latest.outputs.cur
         run: git push
